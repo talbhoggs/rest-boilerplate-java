@@ -18,13 +18,11 @@ public class SecurityController {
     }
 
     @GetMapping("/basic")
-    @PreAuthorize("hasRole('superuser') or hasRole('basic')")
     public String basic() {
         return "BASIC";
     }
 
     @GetMapping("/special")
-    @PreAuthorize("hasRole('superuser')")
     public String special() {
         return "SPECIAL";
     }
