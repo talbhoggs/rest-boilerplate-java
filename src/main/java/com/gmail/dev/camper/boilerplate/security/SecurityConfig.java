@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.gmail.dev.camper.boilerplate.security.jwt.JwtAuthenticationFilter;
+
 //1. Security Config class
 @Configuration
 @EnableMethodSecurity // enable method level
@@ -31,6 +33,11 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
     
     // 4: filter Chain
     @Bean
@@ -41,12 +48,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize-> {
 
                     authorize.requestMatchers(HttpMethod.POST,"/api/user").permitAll();
+                    authorize.requestMatchers("/login").permitAll();
 
                     //
                     authorize.anyRequest().authenticated();
         })
         // 5. Add basic auth filter
-        .addFilterBefore(new BasicAuthenticationFilter(authenticationManager(httpSecurity)), 
+        .addFilterBefore(jwtAuthenticationFilter(), 
                     UsernamePasswordAuthenticationFilter.class)
         .build();
         
