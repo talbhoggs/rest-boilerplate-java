@@ -5,24 +5,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SecurityController {
-    
-    @GetMapping("/open") 
-    public String open() {
-        return "OPEN";
-    }
 
-    @GetMapping("/close") 
-    public String close() {
-        return "close";
-    }
+  @GetMapping("/open")
+  public String open() {
+    return "OPEN";
+  }
 
-    @GetMapping("/basic")
-    public String basic() {
-        return "BASIC";
-    }
+  @GetMapping("/close")
+  public String close() {
+    return "close";
+  }
 
-    @GetMapping("/special")
-    public String special() {
-        return "SPECIAL";
-    }
+  @GetMapping("/basic")
+  public String basic() {
+    return "BASIC";
+  }
+
+  @GetMapping("/special")
+  public String special() {
+    return "SPECIAL";
+  }
 }

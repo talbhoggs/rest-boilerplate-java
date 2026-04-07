@@ -1,30 +1,21 @@
 package com.gmail.dev.camper.boilerplate;
 
-import java.util.Collection;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
-import com.gmail.dev.camper.boilerplate.security.jwt.JwtUtils;
-
-import io.jsonwebtoken.lang.Collections;
 
 @SpringBootApplication
 public class BoilerplateApplication {
 
-	public static void main(String[] args) {
-		            // Get the Java version
-            String javaVersion = System.getProperty("java.version");
-            String javaVendor = System.getProperty("java.vendor");
-            String javaHome = System.getProperty("java.home");
+  public static void main(String[] args) {
+    // Get the Java version
+    String javaVersion = System.getProperty("java.version");
+    String javaVendor = System.getProperty("java.vendor");
+    String javaHome = System.getProperty("java.home");
 
-            // Display the details
-            System.out.println("Java Version: " + javaVersion);
-            System.out.println("Java Vendor: " + javaVendor);
-            System.out.println("Java Home: " + javaHome);
-		SpringApplication.run(BoilerplateApplication.class, args);
-	}
-
+    // Display the details
+    System.out.println("Java Version: " + javaVersion);
+    System.out.println("Java Vendor: " + javaVendor);
+    System.out.println("Java Home: " + javaHome);
+    SpringApplication.run(BoilerplateApplication.class, args);
+  }
 }
