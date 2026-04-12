@@ -1,7 +1,7 @@
-package com.gmail.dev.camper.boilerplate.security.controller;
+package com.gmail.dev.camper.boilerplate.users.controller;
 
-import com.gmail.dev.camper.boilerplate.security.entity.User;
-import com.gmail.dev.camper.boilerplate.security.repository.UserRepository;
+import com.gmail.dev.camper.boilerplate.users.entity.User;
+import com.gmail.dev.camper.boilerplate.users.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
