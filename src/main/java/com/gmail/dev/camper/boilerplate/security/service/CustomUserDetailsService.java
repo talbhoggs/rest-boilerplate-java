@@ -1,8 +1,10 @@
 package com.gmail.dev.camper.boilerplate.security.service;
 
-import com.gmail.dev.camper.boilerplate.security.entity.User;
-import com.gmail.dev.camper.boilerplate.security.repository.UserRepository;
+import com.gmail.dev.camper.boilerplate.users.entity.User;
+import com.gmail.dev.camper.boilerplate.users.repository.UserRepository;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,11 +28,15 @@ public class CustomUserDetailsService implements UserDetailsService {
       throw new UsernameNotFoundException("Invalid or User not found");
     }
 
-    // add roles and authorities
+    List<SimpleGrantedAuthority> authorities =
+        existingUser.get().getRoles().stream()
+            .map(role -> new SimpleGrantedAuthority(role.getName()))
+            .toList();
 
     return org.springframework.security.core.userdetails.User.builder()
         .username(existingUser.get().getUsername())
         .password(existingUser.get().getPassword())
+        .authorities(authorities)
         .build();
   }
 }

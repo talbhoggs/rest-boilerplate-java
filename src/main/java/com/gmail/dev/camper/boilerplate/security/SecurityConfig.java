@@ -1,5 +1,7 @@
 package com.gmail.dev.camper.boilerplate.security;
 
+import com.gmail.dev.camper.boilerplate.security.component.CustomAccessDeniedHandler;
+import com.gmail.dev.camper.boilerplate.security.component.JwtAuthenticationEntryPoint;
 import com.gmail.dev.camper.boilerplate.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,11 +51,20 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authorize -> {
               authorize.requestMatchers(HttpMethod.POST, "/api/user").permitAll();
+              authorize.requestMatchers(HttpMethod.POST, "/register").permitAll();
               authorize.requestMatchers("/login").permitAll();
 
               //
               authorize.anyRequest().authenticated();
             })
+        .exceptionHandling(
+            ex ->
+                ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomAccessDeniedHandler()))
+        .sessionManagement(
+            session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless JWT
+            )
         // 5. Add basic auth filter
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .build();
