@@ -1,7 +1,6 @@
-package com.gmail.dev.camper.boilerplate.exceptions;
+package com.gmail.dev.camper.boilerplate.common.response;
 
 import java.util.Date;
-import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +10,10 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class ErrorResponse {
+public class HttpResponse {
+
   private final Date timestamp;
   private final int status;
-  private final String error;
-  private final Map<String, String> messages;
+  private final String message;
+  private final Object data;
 }

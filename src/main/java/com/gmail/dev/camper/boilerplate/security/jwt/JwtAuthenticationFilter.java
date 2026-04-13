@@ -5,9 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,27 +21,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-
-    // Header
-    // Authorization Bearer
-
-    // 1. get the header bearer
-    String authHeader = request.getHeader("Authorization");
-
-    // 2. validate if exist / malform
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
-      String bearerToken = authHeader.substring(7).trim();
-
-      // 4. valid token
-      if (JwtUtils.validateToken(bearerToken)) {
-        // 5. autheticate
-        String name = JwtUtils.getClaims(bearerToken).getSubject();
-        Authentication authenticate =
-            new UsernamePasswordAuthenticationToken(name, null, Collections.emptyList());
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-      }
+    Optional<String> bearerToken = getBearerToken(request);
+    if (bearerToken.isPresent() && JwtUtils.validateToken(bearerToken.get())) {
+      authenticateUser(bearerToken.get());
     }
     filterChain.doFilter(request, response);
+  }
+
+  private Optional<String> getAuthHeader(HttpServletRequest request) {
+    return Optional.ofNullable(request.getHeader("Authorization"));
+  }
+
+  private void authenticateUser(String bearerToken) {
+    String name = JwtUtils.getClaims(bearerToken).getSubject();
+
+    List<String> roles = JwtUtils.getClaims(bearerToken).get("roles", List.class);
+
+    List<GrantedAuthority> authorities =
+        roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+    Authentication authenticate = new UsernamePasswordAuthenticationToken(name, null, authorities);
+    SecurityContextHolder.getContext().setAuthentication(authenticate);
+  }
+
+  private Optional<String> getBearerToken(HttpServletRequest request) {
+    return getAuthHeader(request)
+        .filter(header -> header.toLowerCase().startsWith("bearer "))
+        .map(header -> header.substring(7).trim());
   }
 }

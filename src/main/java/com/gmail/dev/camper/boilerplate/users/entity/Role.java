@@ -1,5 +1,6 @@
-package com.gmail.dev.camper.boilerplate.security.entity;
+package com.gmail.dev.camper.boilerplate.users.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,11 +9,12 @@ import lombok.Data;
 
 @Entity
 @Data
-public class User {
+public class Role {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private int id;
 
-  private String username;
-  private String password;
+  @Column(length = 30)
+  private String name;
 }

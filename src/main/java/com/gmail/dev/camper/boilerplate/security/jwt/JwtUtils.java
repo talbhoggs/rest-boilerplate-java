@@ -5,7 +5,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 public class JwtUtils {
@@ -13,8 +17,15 @@ public class JwtUtils {
   private static String secretKey = "p71KY78zu/IsOh7dq+XkSGmPuFacAmiH6KTUcDZ0DKA=";
 
   public static String generateToken(User user) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put(
+        "roles",
+        user.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList()));
     return Jwts.builder()
         .subject(user.getUsername())
+        .claims(claims)
         .expiration(new Date(System.currentTimeMillis() + 900000))
         .signWith(signedKeys())
         .compact();
