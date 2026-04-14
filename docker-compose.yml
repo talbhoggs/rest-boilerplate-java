@@ -1,15 +1,16 @@
-version: '3'
 services:
     docker-mysql:
         container_name: docker-mysql
         image: mysql:8.4.8
         restart: always
         environment: 
-            MYSQL_DATABASE: mydb
+            MYSQL_DATABASE: myapp
             MYSQL_ROOT_PASSWORD: password 
             MYSQL_ROOT_HOST: '%'
-        #volumes:
-        #    - ./sql:/docker-entrypoint-initdb.d
+        volumes:
+            - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./docker/mysql/lib:/var/lib/mysql
+            - ./docker/mysql/log:/var/log/mysql
         ports:
             - 3306:3306
         healthcheck:
