@@ -102,6 +102,12 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.6</version>
 		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>9.0</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -167,6 +173,19 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/myapp</url>
+					<user>root</user>
+					<password>password</password>
+					<schemas>
+						<schema>myapp</schema>
+					</schemas>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

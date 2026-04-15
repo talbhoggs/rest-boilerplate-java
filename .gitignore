@@ -35,3 +35,4 @@ build/
 ### Docker ###
 /docker/mysql/lib
 /docker/mysql/log
+/logs

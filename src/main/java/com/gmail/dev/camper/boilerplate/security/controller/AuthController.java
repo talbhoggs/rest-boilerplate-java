@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+
+@Slf4j
 public class AuthController {
 
   private final AuthenticationManager authenticationManager;
@@ -29,6 +33,8 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<HttpResponse> login(@Valid @RequestBody LoginDto user) {
+
+    log.info(getClass() + " Login " + user.getUsername());
 
     UsernamePasswordAuthenticationToken token =
         new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
